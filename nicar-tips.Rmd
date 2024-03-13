@@ -13,18 +13,17 @@ knit: |
   })
 ---
 
-## Install and load library
-```{r, echo=FALSE, include=FALSE}
-if (!require("rjson")) {
-  install.packages("rjson")
-} else {
-  print("this is a test")
-}
-library(rjson)
+```{r, echo=FALSE}
+knitr::opts_chunk$set(include=FALSE) 
 ```
 
-```{r, echo=FALSE}
-json_data <- rjson::fromJSON(file="https://resources.ire.org/meta/nicar-2024-tipsheets-audio.json")
+```{r} 
+library(rjson)
+library(DT)
+```
+
+```{r}
+json_data <- fromJSON(file="https://resources.ire.org/meta/nicar-2024-tipsheets-audio.json")
 
 sessions_df <- data.frame(session_title = character(), 
                           speakers = character(), 
@@ -36,7 +35,7 @@ sessions_df <- data.frame(session_title = character(),
 
 for (day in json_data$sessions) {
   for (session in day$data) {
-    ## 
+   
     session_title <- session$session_title
     speakers <- session$speakers
     if (session$audio_recording_link != "") {
@@ -68,12 +67,12 @@ sessions_df$tipsheets <- sapply(sessions_df$tipsheets, function(x) {
 
 ```
 
-```{r, echo=FALSE, include=FALSE}
+```{r}
 readr::write_csv(sessions_df, "session_df.csv")
 ```
 
-```{r, echo=FALSE, include=TRUE}
-DT::datatable(sessions_df, options = list(pageLength = 20), escape = FALSE)
+```{r, include=TRUE, echo=FALSE}
+datatable(sessions_df, options = list(pageLength = 20), escape = FALSE)
 ```
 
 
