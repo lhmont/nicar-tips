@@ -18,8 +18,8 @@ knitr::opts_chunk$set(include=FALSE)
 ```
 
 ```{r} 
-library(rjson)
-library(DT)
+library(rjson) #to read JSON
+library(DT) # to make the nice dataframe
 ```
 
 ```{r}
@@ -27,18 +27,19 @@ json_data <- fromJSON(file="https://resources.ire.org/meta/nicar-2024-tipsheets-
 
 sessions_df <- data.frame(session_title = character(), 
                           speakers = character(), 
-                          #description = character(),
+                          #description = character(), #I decided to keep this out
                           tipsheets = character(), 
                           audio_recording_link = character(), 
                           stringsAsFactors = FALSE)
 
 
-for (day in json_data$sessions) {
+for (day in json_data$sessions) { #the magical loop to extract data from the JSON file
   for (session in day$data) {
    
     session_title <- session$session_title
     speakers <- session$speakers
-    if (session$audio_recording_link != "") {
+    
+    if (session$audio_recording_link != "") { #to make the links
         audio_recording_link <- paste0("[", "Audio Recording", "](", session$audio_recording_link, ")")
     } else {
       audio_recording_link <- NA
